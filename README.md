@@ -17,16 +17,25 @@ Easily run redis scripts from Node.
 
 ```javascript
 const redis = require('redis').createClient();
+const { createScript } = require('node-redis-script');
 
-const scriptSrc = 'return KEYS[1]';
+const incrbyExSrc = `
+  local current
+  current = redis.call('incrby',KEYS[1],ARGV[1])
+  redis.call('expire',KEYS[1],ARGV[2]);
+  return current
+`;
 
 // give it a redis client and script source
-const echo = createScript(redis, scriptSrc);
+const incrbyEx = createScript(redis, incrbyExSrc);
 // you get back a function that runs your script with given args
-// redis requires you to tell it how many arguments to expect
-const numArgs = 1;
-const result = await echo(numArgs, 'hi');
-// Should print 'hi'
+// redis requires you to tell it how many keys to expect
+const numKeys = 1;
+const key = 'test';
+const incr = 1;
+const ex = 10;
+const result = await incrbyEx(numKeys, key, incr, ex);
+// Should print 1
 console.log(result);
 ```
 

@@ -20,10 +20,10 @@ const evalsha = promisify((redis, ...args) => redis.evalsha(...args));
 exports.createScript = function(redis, src) {
   const digest = createDigest(src);
 
-  return async function runScript(numArgs, ...args) {
+  return async function runScript(numKeys, ...args) {
       let result, err;
       try {
-        result = await evalsha(redis, digest, numArgs, ...args);
+        result = await evalsha(redis, digest, numKeys, ...args);
       } catch(e) {
         err = e;
       }
@@ -31,7 +31,7 @@ exports.createScript = function(redis, src) {
       if (err && err.message.includes('NOSCRIPT')) {
         await installScript(redis, digest, src);
         // try again
-        result = await evalsha(redis, digest, numArgs, ...args);
+        result = await evalsha(redis, digest, numKeys, ...args);
       }
 
       return result;
