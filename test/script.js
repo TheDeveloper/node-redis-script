@@ -10,7 +10,8 @@ describe('script', () => {
       redis.call('expire',KEYS[1],ARGV[2]);
       return current
     `;
-    const incrbyEx = createScript(redis, src);
+    const opts = { redis };
+    const incrbyEx = createScript(opts, src);
     const numKeys = 1;
     const key = 'test';
     const incr = 1;

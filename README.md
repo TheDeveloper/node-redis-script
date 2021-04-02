@@ -27,7 +27,8 @@ const incrbyExSrc = `
 `;
 
 // give it a redis client and script source
-const incrbyEx = createScript(redis, incrbyExSrc);
+const opts = { redis }; // or { ioredis } for ioredis
+const incrbyEx = createScript(opts, incrbyExSrc);
 // you get back a function that runs your script with given args
 // redis requires you to tell it how many keys to expect
 const numKeys = 1;
@@ -37,6 +38,15 @@ const ex = 10;
 const result = await incrbyEx(numKeys, key, incr, ex);
 // Should print 1
 console.log(result);
+```
+
+# Options
+```js
+const opts = {
+  // you can use either node-redis or ioredis client
+  redis, // node-redis client
+  ioredis // ioredis client
+};
 ```
 
 # Test
