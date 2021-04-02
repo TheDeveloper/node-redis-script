@@ -5,7 +5,7 @@ Easily run redis scripts from Node.
 
 # Requirements
 
-* [node-redis](https://github.com/NodeRedis/node-redis) v0.10+
+* [node-redis](https://github.com/NodeRedis/node-redis) v0.10+ or [ioredis](https://github.com/luin/ioredis)
 * Redis `v2.6` or above
 * Node 10+
 
