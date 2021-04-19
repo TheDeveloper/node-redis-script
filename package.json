@@ -2,14 +2,16 @@
   "name": "node-redis-script",
   "version": "2.0.1",
   "description": "Easily use redis scripts in Node",
-  "main": "src/index",
+  "main": "dist/index",
   "scripts": {
     "pretest": "npm run start-redis",
     "posttest": "npm run cleanup",
     "test": "mocha --exit test",
     "start-redis": "docker-compose up -d redis",
     "cleanup": "docker-compose stop && docker-compose rm -f",
-    "monitor": "docker-compose up monitor"
+    "monitor": "docker-compose up monitor",
+    "build": "tsc",
+    "watch": "tsc -w"
   },
   "repository": {
     "type": "git",
@@ -29,9 +31,12 @@
   "homepage": "https://github.com/thedeveloper/scripty",
   "dependencies": {},
   "devDependencies": {
+    "@types/ioredis": "^4.22.3",
+    "@types/node": "^14.14.41",
+    "@types/redis": "^2.8.28",
     "chai": "^4.3.0",
-    "ioredis": "^4.24.6",
     "mocha": "^8.3.0",
-    "redis": "^3.0.2"
+    "redis": "^3.1.1",
+    "typescript": "^4.2.4"
   }
 }

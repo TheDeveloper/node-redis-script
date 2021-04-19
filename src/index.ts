@@ -1,11 +1,14 @@
+import { Redis } from "ioredis";
+import { RedisClient } from "redis";
+
 const crypto = require('crypto');
 const { nodeRedis, ioredis } = require('./client');
 
-function createDigest(src) {
+function createDigest(src: string): string {
   return crypto.createHash('sha1').update(src).digest('hex');
 }
 
-async function installScript(client, digest, src) {
+async function installScript(client: any, digest: string, src: string) {
   const result = await client.script('load', src);
 
   if (result !== digest) {
@@ -13,8 +16,21 @@ async function installScript(client, digest, src) {
   }
 }
 
-exports.createScript = function(opts, src) {
-  let client;
+interface Opts {
+  redis?: RedisClient,
+  ioredis?: Redis
+}
+
+export type RunScript = (
+  numKeys: number,
+  ...args: any[]
+) => Promise<string>
+
+export function createScript (
+  opts: Opts,
+  src: string
+): RunScript {
+  let client: any;
 
   if (opts.redis) client = nodeRedis(opts.redis);
   if (opts.ioredis) client = ioredis(opts.ioredis);
